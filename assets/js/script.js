@@ -173,7 +173,7 @@ function crearPropiedad(_propiedad) {
     informacion.appendChild(ubicacion);
 
     /* creacion de dormitorios y baños */
-    const habBan =  document.createElement('h5');
+    const habBan = document.createElement('h5');
 
     const icono_cama = document.createElement('i');
     icono_cama.className = 'fa-solid fa-bed';
@@ -181,12 +181,12 @@ function crearPropiedad(_propiedad) {
 
     let habitacion;
 
-    if(_propiedad.habitaciones === 1) {
+    if (_propiedad.habitaciones === 1) {
         habitacion = `${_propiedad.habitaciones} Habitación | `;
     } else {
         habitacion = `${_propiedad.habitaciones} Habitaciones | `;
     }
-        
+
     habBan.append(habitacion);
 
     const icono_bano = document.createElement('i');
@@ -196,7 +196,7 @@ function crearPropiedad(_propiedad) {
 
     let banos;
 
-    if(_propiedad.bano === 1) {
+    if (_propiedad.bano === 1) {
         banos = `${_propiedad.bano} Baño`;
     } else {
         banos = `${_propiedad.bano} Baños`;
@@ -207,16 +207,16 @@ function crearPropiedad(_propiedad) {
 
     const price = document.createElement('h2');
 
-/* fomtear el precio */
+    /* fomtear el precio */
     price.innerText = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(
         _propiedad.costo
-      ) ;
+    );
 
     informacion.appendChild(price);
 
     const petHtml = document.createElement('h5');
 
-    if(_propiedad.pets === true) {
+    if (_propiedad.pets === true) {
         petHtml.className = 'pet';
         const icon_pet = document.createElement('i');
         icon_pet.className = 'fa-solid fa-paw';
@@ -234,17 +234,17 @@ function crearPropiedad(_propiedad) {
 
     const smokeHtml = document.createElement('h5');
 
-    if(_propiedad.smoke === true) {
+    if (_propiedad.smoke === true) {
         smokeHtml.className = 'smoke';
-        const icon_pet = document.createElement('i');
-        icon_pet.className = 'fa-solid fa-smoking';
-        smokeHtml.appendChild(icon_pet);
+        const icon_smoke = document.createElement('i');
+        icon_smoke.className = 'fa-solid fa-smoking';
+        smokeHtml.appendChild(icon_smoke);
         smokeHtml.append('Permitido fumar');
     } else {
         smokeHtml.className = 'not-smoke';
-        const icon_pet = document.createElement('i');
-        icon_pet.className = 'fa-solid fa-ban-smoking';
-        smokeHtml.appendChild(icon_pet);
+        const icon_smoke = document.createElement('i');
+        icon_smoke.className = 'fa-solid fa-ban-smoking';
+        smokeHtml.appendChild(icon_smoke);
         smokeHtml.append('No se permite fumar');
     }
 
@@ -254,9 +254,66 @@ function crearPropiedad(_propiedad) {
     return nuevo;
 }
 
+function crearPropiedadInnerHTML(_propiedad) {
+    let habitacion;
+
+    if (_propiedad.habitaciones === 1) {
+        habitacion = `${_propiedad.habitaciones} Habitación | `;
+    } else {
+        habitacion = `${_propiedad.habitaciones} Habitaciones | `;
+    }
+
+    let banos;
+
+    if (_propiedad.bano === 1) {
+        banos = `${_propiedad.bano} Baño`;
+    } else {
+        banos = `${_propiedad.bano} Baños`;
+    }
+
+    precio = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(
+        _propiedad.costo
+    );
+
+    let clase_pet, icono_pet, text_pet;
+    if (_propiedad.pets === true) {
+        clase_pet = 'pet';
+        icono_pet = 'fa-solid fa-paw';
+        text_pet = 'Mascotas permitidas';
+    } else {
+        clase_pet = 'not-pet';
+        icono_pet = 'fa-solid fa-ban';
+        text_pet = 'No se permiten mascotas';
+    }
+    let clase_smoke, icono_smoke, text_smoke;
+    if (_propiedad.smoke === true) {
+        clase_smoke = 'smoke';
+        icono_smoke = 'fa-solid fa-smoking';
+        text_smoke = 'Permitido fumar';
+    } else {
+        clase_smoke = 'not-smoke';
+        icono_smoke = 'fa-solid fa-ban-smoking';
+        text_smoke = 'No se permite fumar';
+    }
+
+    return `<div class="propiedad">
+            <div class="img"><img src="${_propiedad.src}"></div>
+            <div class="informacion">
+                <h3>${_propiedad.nombre}</h3>
+                <h5>${_propiedad.descripcion}</h5>
+                <h5><i class="fa-solid fa-location-dot"></i>${_propiedad.ubicacion}</h5>
+                <h5><i class="fa-solid fa-bed"></i>${habitacion} | <i class="fa-solid fa-bath"></i>${banos}</h5>
+                <h2>${precio}</h2>
+                <h5 class="${clase_pet}"><i class="${icono_pet}"></i>${text_pet}</h5>
+                <h5 class="${clase_smoke}"><i class="${icono_smoke}"></i>${text_smoke}</h5>
+            </div>
+        </div>`;
+
+}
+
 const alquiler_summary = document.getElementById("alquiler-summary");
 
-if(alquiler_summary){
+if (alquiler_summary) {
     for (let index = 0; index < 3; index++) {
         const propiedad = crearPropiedad(propiedades_alquiler[index]);
         alquiler_summary.appendChild(propiedad);
@@ -265,7 +322,7 @@ if(alquiler_summary){
 
 const ventas_summary = document.getElementById("ventas-summary");
 
-if(alquiler_summary){
+if (alquiler_summary) {
     for (let index = 0; index < 3; index++) {
         const propiedad = crearPropiedad(propiedades_venta[index]);
         ventas_summary.appendChild(propiedad);
@@ -274,18 +331,22 @@ if(alquiler_summary){
 
 const ventas = document.getElementById("ventas");
 
-if(ventas){
+if (ventas) {
+    let propiedades = '';
     for (let index = 0; index < propiedades_venta.length; index++) {
-        const propiedad = crearPropiedad(propiedades_venta[index]);
-        ventas.appendChild(propiedad);
+        const propiedad = crearPropiedadInnerHTML(propiedades_venta[index]);
+        propiedades += propiedad;
     }
+    ventas.innerHTML = propiedades;
 }
 
 const alquiler = document.getElementById("alquiler");
 
-if(alquiler){
+if (alquiler) {
+    let propiedades = '';
     for (let index = 0; index < propiedades_alquiler.length; index++) {
-        const propiedad = crearPropiedad(propiedades_alquiler[index]);
-        alquiler.appendChild(propiedad);
+        const propiedad = crearPropiedadInnerHTML(propiedades_alquiler[index]);
+        propiedades += propiedad;
     }
+    alquiler.innerHTML = propiedades;
 }
